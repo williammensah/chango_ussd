@@ -24,7 +24,7 @@ class CampaignName extends ScreenSession
         $userState = (new UserState)->getState();
         $content = $this->getMenuContent('campaign_name');
         $output = str_replace(['{data}','{target}', '{Collected}'],[$data[0]['campaignName'],$data[0]['target'],$data[0]['collected']], $content);
-        (new UserState)->store(['campaign_name' => $data[0]['campaignName']]);
+        (new UserState)->store(['campaign_name' => $data[0]['campaignName'],'campaign_id' =>$data[0]['campaignId']]);
         return $this->response($output, $this->menuName);
     }
 
@@ -46,7 +46,7 @@ class CampaignName extends ScreenSession
             return $this->nextScreen($state, $next);
         }
         if (request()->userInput  == "0") {
-            
+
             $previousMenu = 'campaign_alias';
             $state['current_menu'] = $previousMenu;
             (new ClientState)->setState($previousMenu, request()->all(), $state['flow']);

@@ -19,8 +19,27 @@ class AuthorizePayment extends ScreenSession
     public function ask()
     {
         $userState = (new UserState)->getState();
+        $uniwalletData = $this->uniwalletData($userState);
+        //pass the information to queue
         $content = $this->getMenuContent('authorize_payment');
         return $this->endSession($content, 'authorize_payment');
     }
+    private function uniwalletData ($data)
+    {
+        $transactionData = [
+            'trans_type' => 'debit',
+            'transaction_id' => strtoupper(date("Ymd") . uniqid()),
+            'customer_number' => request()->msisdn,
+            'amount' => $data['amount'],
+            'network' =>request()->operator,
+            'campaignId' => $data['campaign_id'],
+            'campaignCode' => $data['campaign_code'],
+            'campaignAlias' => $data['campaign_alias']
+        ];
+        return $transactionData;
+    }
+    public function pushToQueue()
+    {
 
+    }
 }

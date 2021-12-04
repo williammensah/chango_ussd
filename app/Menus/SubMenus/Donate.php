@@ -20,9 +20,8 @@ class Donate extends ScreenSession
 
     public function ask()
     {
-        $userState = (new UserState)->getState();
-        $content = $this->getMenuContent('donate');
-        $output = str_replace(['{data}'],[$userState['campaign_name']], $content);
+
+        $output = $this->formatData();
         return $this->response($output, $this->menuName);
     }
 
@@ -36,11 +35,25 @@ class Donate extends ScreenSession
             Log::info('Validator failed for entering amount', [$validator->errors()]);
            // return $this->response($output, $this->menuName);
         }
+        if ((float) request()->userInput < 0.1 ) {
+            $message = " The transaction amount is less than the minimium current amount! ".PHP_EOL;
+            $data =$this->formatData();
+            $output = $this->prepend($data, $this->invalidInput($message));
+            return $this->response($output,$this->menuName);
+        }
          //addd validation
         (new UserState)->store(['amount' => request()->userInput]);
         (new ClientState)->setState($next, request()->all(), $state['flow']);
         return $this->nextScreen($state, $next);
     }
 
-   
+    public function formatData()
+    {
+        $userState = (new UserState)->getState();
+        $content = $this->getMenuContent('donate');
+        $output = str_replace(['{data}'],[$userState['campaign_name']], $content);
+        return $output;
+    }
+
+
 }

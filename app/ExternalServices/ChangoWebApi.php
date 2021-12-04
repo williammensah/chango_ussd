@@ -15,7 +15,7 @@ class ChangoWebApi
     {
         $this->url = config('services.chango_web_api.url');
     }
-     
+
     public function getCampaignByAlias()
     {
         return [
@@ -23,8 +23,8 @@ class ChangoWebApi
             'responseMessage' => 'success',
             'data' => [
                 [
-                    'target' => 500.00,
-                    'collected' => 2.00,
+                    'target' => "500.00",
+                    'collected' => "2.00",
                     'campaignId' => "012",
                     'campaignName' => "PRESEC QUIZ Condolence Campaign",
                     'created_at' => "2021-03-23 15:00:30"
@@ -174,7 +174,7 @@ class ChangoWebApi
                 return $this->resetArrayIndexToStartFromOne($products);
             }
             Log::error('Did not get a success from productLookup Lookup',[$response]);
-        
+
             return null;
         });
 
@@ -182,7 +182,7 @@ class ChangoWebApi
 
     public function pendingEvacuation($poId)
     {
-    
+
 
             $response =  $data = ['purchasing_officer_id' => $poId];
             $response = Http::post($this->url.'/evacuations/lookup',$data);
@@ -224,7 +224,7 @@ class ChangoWebApi
             \Log::info('received a 400 rsponse form trans history  api',[$response]);
             return null;
         }
-        
+
     }
 
     public function makePayment($data)
@@ -238,7 +238,7 @@ class ChangoWebApi
 
     }
 
-    
+
     public function evacuationProcess($data)
     {
         $response = Http::post($this->url . '/evacuations/process', $data);
